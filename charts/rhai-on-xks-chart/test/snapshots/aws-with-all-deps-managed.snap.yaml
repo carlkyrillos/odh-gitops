@@ -6,7 +6,6 @@ metadata:
   name: cert-manager-operator
   annotations:
     helm.sh/resource-policy: keep
-
 ---
 # Source: rhai-on-xks-chart/charts/cert-manager-operator/templates/namespace.yaml
 apiVersion: v1
@@ -63,7 +62,6 @@ metadata:
     app.kubernetes.io/managed-by: Helm
   annotations:
     helm.sh/resource-policy: keep
-
 ---
 # Source: rhai-on-xks-chart/templates/pull-secret.yaml
 apiVersion: v1
@@ -75,7 +73,6 @@ metadata:
     app.kubernetes.io/managed-by: Helm
   annotations:
     helm.sh/resource-policy: keep
-
 ---
 # Source: rhai-on-xks-chart/charts/cert-manager-operator/templates/serviceaccount-cert-manager-operator-controller-manager.yaml
 apiVersion: v1
@@ -95,7 +92,6 @@ metadata:
   namespace: cert-manager
 imagePullSecrets:
   - name: rhai-pull-secret
-
 ---
 # Source: rhai-on-xks-chart/charts/cert-manager-operator/templates/serviceaccount-cert-manager.yaml
 apiVersion: v1
@@ -105,7 +101,6 @@ metadata:
   namespace: cert-manager
 imagePullSecrets:
   - name: rhai-pull-secret
-
 ---
 # Source: rhai-on-xks-chart/charts/cert-manager-operator/templates/serviceaccount-cert-manager.yaml
 apiVersion: v1
@@ -135,7 +130,6 @@ metadata:
   namespace: redhat-ods-applications
 imagePullSecrets:
   - name: rhai-pull-secret
-
 ---
 # Source: rhai-on-xks-chart/templates/pull-secret.yaml
 apiVersion: v1
@@ -169,7 +163,6 @@ metadata:
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: dGVzdGF1dGg=
-
 ---
 # Source: rhai-on-xks-chart/templates/pull-secret.yaml
 apiVersion: v1
@@ -183,7 +176,6 @@ metadata:
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: dGVzdGF1dGg=
-
 ---
 # Source: rhai-on-xks-chart/templates/pull-secret.yaml
 apiVersion: v1
@@ -197,7 +189,6 @@ metadata:
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: dGVzdGF1dGg=
-
 ---
 # Source: rhai-on-xks-chart/templates/pull-secret.yaml
 apiVersion: v1
@@ -211,7 +202,6 @@ metadata:
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: dGVzdGF1dGg=
-
 ---
 # Source: rhai-on-xks-chart/templates/pull-secret.yaml
 apiVersion: v1
@@ -225,7 +215,6 @@ metadata:
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: dGVzdGF1dGg=
-
 ---
 # Source: rhai-on-xks-chart/templates/pull-secret.yaml
 apiVersion: v1
@@ -239,7 +228,6 @@ metadata:
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: dGVzdGF1dGg=
-
 ---
 # Source: rhai-on-xks-chart/templates/pull-secret.yaml
 apiVersion: v1
@@ -253,7 +241,6 @@ metadata:
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: dGVzdGF1dGg=
-
 ---
 # Source: rhai-on-xks-chart/templates/pull-secret.yaml
 apiVersion: v1
@@ -267,7 +254,6 @@ metadata:
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: dGVzdGF1dGg=
-
 ---
 # Source: rhai-on-xks-chart/templates/cloudmanager/aws/crds/customresourcedefinition-awskubernetesengines.infrastructure.opendatahub.io.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3196,7 +3182,6 @@ metadata:
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
-
 ---
 # Source: rhai-on-xks-chart/templates/hooks/pre-delete-crs-rbac.yaml
 apiVersion: v1
@@ -3210,7 +3195,6 @@ metadata:
   annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
-
 ---
 # Source: rhai-on-xks-chart/templates/hooks/pre-upgrade-migrate-certmanager-job.yaml
 apiVersion: v1
@@ -3225,7 +3209,6 @@ metadata:
     helm.sh/hook: pre-upgrade
     helm.sh/hook-weight: "0"
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
-
 ---
 # Source: rhai-on-xks-chart/templates/hooks/pre-delete-crs-rbac.yaml
 apiVersion: v1
@@ -3242,7 +3225,6 @@ metadata:
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: dGVzdGF1dGg=
-
 ---
 # Source: rhai-on-xks-chart/templates/hooks/pre-upgrade-migrate-certmanager-job.yaml
 apiVersion: v1
@@ -3260,7 +3242,6 @@ metadata:
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: dGVzdGF1dGg=
-
 ---
 # Source: rhai-on-xks-chart/templates/hooks/post-install-crs-rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -3347,7 +3328,6 @@ rules:
       - create
       - patch
       - update
-
 ---
 # Source: rhai-on-xks-chart/templates/hooks/pre-delete-crs-rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -3386,7 +3366,6 @@ rules:
     verbs:
       - get
       - delete
-
 ---
 # Source: rhai-on-xks-chart/templates/hooks/pre-upgrade-migrate-certmanager-job.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -3436,7 +3415,6 @@ rules:
     verbs:
       - get
       - list
-
 ---
 # Source: rhai-on-xks-chart/templates/hooks/post-install-crs-rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -3457,7 +3435,6 @@ subjects:
   - kind: ServiceAccount
     name: rhai-post-install-hook
     namespace: default
-
 ---
 # Source: rhai-on-xks-chart/templates/hooks/pre-delete-crs-rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -3500,7 +3477,6 @@ subjects:
   - kind: ServiceAccount
     name: rhai-pre-upgrade-migrate-certmanager
     namespace: default
-
 ---
 # Source: rhai-on-xks-chart/templates/hooks/post-install-crs-rbac.yaml
 # Certificate is namespaced to the applications namespace.
@@ -3525,7 +3501,6 @@ rules:
       - create
       - patch
       - update
-
 ---
 # Source: rhai-on-xks-chart/templates/hooks/post-install-crs-rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -3620,6 +3595,8 @@ spec:
                   lws:
                     configuration:
                       namespace: openshift-lws-operator
+                    managementPolicy: Managed
+                  rhcl:
                     managementPolicy: Managed
                   sailOperator:
                     configuration:
