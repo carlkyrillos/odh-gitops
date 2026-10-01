@@ -69,6 +69,30 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: kuadrant-operators
+  labels:
+    helm.sh/chart: HELM_CHART_VERSION_REDACTED
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    helm.sh/resource-policy: keep
+
+---
+# Source: rhai-on-xks-chart/templates/pull-secret.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kuadrant-system
+  labels:
+    helm.sh/chart: HELM_CHART_VERSION_REDACTED
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    helm.sh/resource-policy: keep
+
+---
+# Source: rhai-on-xks-chart/templates/pull-secret.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
   name: istio-system
   labels:
     helm.sh/chart: HELM_CHART_VERSION_REDACTED
@@ -239,6 +263,34 @@ kind: Secret
 metadata:
   name: rhai-pull-secret
   namespace: openshift-lws-operator
+  labels:
+    helm.sh/chart: HELM_CHART_VERSION_REDACTED
+    app.kubernetes.io/managed-by: Helm
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: dGVzdGF1dGg=
+
+---
+# Source: rhai-on-xks-chart/templates/pull-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rhai-pull-secret
+  namespace: kuadrant-operators
+  labels:
+    helm.sh/chart: HELM_CHART_VERSION_REDACTED
+    app.kubernetes.io/managed-by: Helm
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: dGVzdGF1dGg=
+
+---
+# Source: rhai-on-xks-chart/templates/pull-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rhai-pull-secret
+  namespace: kuadrant-system
   labels:
     helm.sh/chart: HELM_CHART_VERSION_REDACTED
     app.kubernetes.io/managed-by: Helm

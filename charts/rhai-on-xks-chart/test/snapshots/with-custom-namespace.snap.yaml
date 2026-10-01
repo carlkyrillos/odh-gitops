@@ -69,6 +69,30 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: custom-kuadrant-operators
+  labels:
+    helm.sh/chart: HELM_CHART_VERSION_REDACTED
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    helm.sh/resource-policy: keep
+
+---
+# Source: rhai-on-xks-chart/templates/pull-secret.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: custom-kuadrant-system
+  labels:
+    helm.sh/chart: HELM_CHART_VERSION_REDACTED
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    helm.sh/resource-policy: keep
+
+---
+# Source: rhai-on-xks-chart/templates/pull-secret.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
   name: custom-istio
   labels:
     helm.sh/chart: HELM_CHART_VERSION_REDACTED
@@ -239,6 +263,34 @@ kind: Secret
 metadata:
   name: rhai-pull-secret
   namespace: custom-lws
+  labels:
+    helm.sh/chart: HELM_CHART_VERSION_REDACTED
+    app.kubernetes.io/managed-by: Helm
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: dGVzdGF1dGg=
+
+---
+# Source: rhai-on-xks-chart/templates/pull-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rhai-pull-secret
+  namespace: custom-kuadrant-operators
+  labels:
+    helm.sh/chart: HELM_CHART_VERSION_REDACTED
+    app.kubernetes.io/managed-by: Helm
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: dGVzdGF1dGg=
+
+---
+# Source: rhai-on-xks-chart/templates/pull-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rhai-pull-secret
+  namespace: custom-kuadrant-system
   labels:
     helm.sh/chart: HELM_CHART_VERSION_REDACTED
     app.kubernetes.io/managed-by: Helm
@@ -4250,7 +4302,10 @@ spec:
                       namespace: custom-lws
                     managementPolicy: Managed
                   rhcl:
-                    managementPolicy: Unmanaged
+                    configuration:
+                      operandNamespace: custom-kuadrant-system
+                      operatorNamespace: custom-kuadrant-operators
+                    managementPolicy: Managed
                   sailOperator:
                     configuration:
                       namespace: custom-istio
