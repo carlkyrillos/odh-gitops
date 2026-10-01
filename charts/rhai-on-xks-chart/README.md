@@ -49,13 +49,17 @@ podman login registry.redhat.io --authfile /path/to/auth.json
 
 The `imagePullSecret.dockerConfigJson` parameter:
 
-1. Creates a `kubernetes.io/dockerconfigjson` Secret named `rhai-pull-secret` in all chart-managed namespaces (operator, applications, release, cloud manager and all dependency namespaces)
+1. Creates a `kubernetes.io/dockerconfigjson` Secret named `rhai-pull-secret` in the operator, applications, release, cloud manager and managed dependency namespaces
 2. Adds `imagePullSecrets` to all chart-managed ServiceAccounts (RHAI operator, cloud manager, llmisvc-controller-manager, and the post-install hook)
 
 The secret name defaults to `rhai-pull-secret` and **should not** be changed.
 
 > [!NOTE]
-> Pull secrets for dependency namespaces (`cert-manager-operator`, `cert-manager`, `istio-system`, `openshift-lws-operator`) are managed by this chart by default. To customize which dependency namespaces receive pull secrets, set `imagePullSecret.dependencyNamespaces`.
+> Pull secrets for managed dependency namespaces are created automatically, including RHCL’s operator and operand namespaces when RHCL is `Managed`. The chart uses the configured RHCL namespaces or CCM’s defaults (`kuadrant-operators` and `kuadrant-system`). Use `imagePullSecret.dependencyNamespaces` for additional namespaces.
+
+The chart reuses dependency namespaces that already exist, including RHCL namespaces created by CCM. It creates a Namespace only when that namespace is absent or already belongs to this Helm release; it does not take ownership of a CCM namespace.
+
+When RHCL changes from `Managed` to `Unmanaged`, the chart retains its pull secrets while the active KubernetesEngine still owns the Kuadrant CR or workloads in RHCL's operator namespace. CCM removes that CR before it finishes removing the operators. A later Helm upgrade removes the pull secrets after the CR and operator workloads are gone. Helm's live `lookup` checks do not run in `helm template` or client-side dry runs; use a server-side dry run to inspect the resources for an existing cluster.
 
 ## Installation
 
