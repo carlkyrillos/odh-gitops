@@ -2810,6 +2810,9 @@ spec:
                       namespace: openshift-lws-operator
                     managementPolicy: Unmanaged
                   rhcl:
+                    configuration:
+                      operandNamespace: kuadrant-system
+                      operatorNamespace: kuadrant-operators
                     managementPolicy: Unmanaged
                   sailOperator:
                     configuration:

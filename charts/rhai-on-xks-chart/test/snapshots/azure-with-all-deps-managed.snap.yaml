@@ -3757,6 +3757,9 @@ spec:
                       namespace: openshift-lws-operator
                     managementPolicy: Managed
                   rhcl:
+                    configuration:
+                      operandNamespace: kuadrant-system
+                      operatorNamespace: kuadrant-operators
                     managementPolicy: Managed
                   sailOperator:
                     configuration:
