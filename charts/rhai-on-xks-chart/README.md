@@ -55,11 +55,9 @@ The `imagePullSecret.dockerConfigJson` parameter:
 The secret name defaults to `rhai-pull-secret` and **should not** be changed.
 
 > [!NOTE]
-> Pull secrets for managed dependency namespaces are created automatically, including RHCL’s operator and operand namespaces when RHCL is `Managed`. The chart uses the configured RHCL namespaces or CCM’s defaults (`kuadrant-operators` and `kuadrant-system`). Use `imagePullSecret.dependencyNamespaces` for additional namespaces.
+> Pull secrets for managed dependency namespaces are created automatically, including RHCL’s operator and operand namespaces when RHCL is `Managed`. The chart uses the configured RHCL namespaces, defaulting to `kuadrant-operators` and `kuadrant-system`. Use `imagePullSecret.dependencyNamespaces` for additional namespaces.
 
-The chart reuses dependency namespaces that already exist, including RHCL namespaces created by CCM. It creates a Namespace only when that namespace is absent or already belongs to this Helm release; it does not take ownership of a CCM namespace.
-
-When RHCL changes from `Managed` to `Unmanaged`, the chart retains its pull secrets while the active KubernetesEngine still owns the Kuadrant CR or workloads in RHCL's operator namespace. CCM removes that CR before it finishes removing the operators. A later Helm upgrade removes the pull secrets after the CR and operator workloads are gone. Helm's live `lookup` checks do not run in `helm template` or client-side dry runs; use a server-side dry run to inspect the resources for an existing cluster.
+The chart renders Namespace resources for managed dependency namespaces, including RHCL's operator and operand namespaces. If a dependency namespace already exists and should be managed by this Helm release, rerun the installation or upgrade with Helm's `--take-ownership` flag. The chart keeps dependency namespaces on uninstall.
 
 ## Installation
 
