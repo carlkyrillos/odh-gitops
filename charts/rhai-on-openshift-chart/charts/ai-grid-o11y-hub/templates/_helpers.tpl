@@ -58,6 +58,11 @@ infrastructure
 {{- .Values.objectStorage.obc.name | default (printf "%s-bucket" (include "ai-grid-o11y-hub.lokiStackName" .)) }}
 {{- end }}
 
+{{- define "ai-grid-o11y-hub.mtlsSelectorLabels" -}}
+app.kubernetes.io/name: {{ include "ai-grid-o11y-hub.name" . }}-mtls
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
 {{/*
 Name of the Secret the LokiStack reads. Rendered by this chart when
 objectStorage.secret.create, supplied by the user otherwise.
