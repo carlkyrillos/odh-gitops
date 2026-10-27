@@ -50,6 +50,11 @@ app.kubernetes.io/name: {{ include "ai-grid-o11y-hub.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
+{{- define "ai-grid-o11y-hub.mtlsSelectorLabels" -}}
+app.kubernetes.io/name: {{ include "ai-grid-o11y-hub.name" . }}-mtls
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
 {{/*
 Create the name of the service account to use
 */}}

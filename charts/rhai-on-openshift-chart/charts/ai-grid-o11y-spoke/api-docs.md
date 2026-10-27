@@ -1,52 +1,58 @@
 # ai-grid-o11y-spoke
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
-A Helm chart for Kubernetes
+Spoke-side AI Grid observability resources
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| affinity | object | `{}` |  |
-| autoscaling.enabled | bool | `false` |  |
-| autoscaling.maxReplicas | int | `100` |  |
-| autoscaling.minReplicas | int | `1` |  |
-| autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
 | collector.namespace | string | `"redhat-ods-monitoring"` | Namespace containing the data-science-collector. Must match `operator.<type>.monitoringNamespace` when used through the parent chart. |
 | collector.port | int | `8890` | Prometheus exporter port, shared by the scrape target, NetworkPolicy and parent-injected exporter. |
+| collector.scrapeConfig.enabled | bool | `false` | Render ScrapeConfig only when this cluster has the open-cluster-management-observability namespace. |
+| datasource.apiVersion | string | `"perses.dev/v1alpha2"` |  |
+| datasource.instanceSelector | object | `{}` | Label selector for the intended spoke Perses instance. |
+| datasource.name | string | `"grid-tenant-hub-metrics"` |  |
+| enabled | bool | `false` | Include the spoke chart. The parent chart uses this as its dependency condition. |
 | fullnameOverride | string | `""` |  |
-| httpRoute | object | `{"annotations":{},"enabled":false,"hostnames":["chart-example.local"],"parentRefs":[{"name":"gateway","sectionName":"http"}],"rules":[{"matches":[{"path":{"type":"PathPrefix","value":"/headers"}}]}]}` | Expose the service via gateway-api HTTPRoute Requires Gateway API resources and suitable controller installed within the cluster (see: https://gateway-api.sigs.k8s.io/guides/) |
-| image.pullPolicy | string | `"IfNotPresent"` |  |
-| image.repository | string | `"nginx"` |  |
-| image.tag | string | `""` |  |
-| imagePullSecrets | list | `[]` |  |
-| ingress.annotations | object | `{}` |  |
-| ingress.className | string | `""` |  |
-| ingress.enabled | bool | `false` |  |
-| ingress.hosts[0].host | string | `"chart-example.local"` |  |
-| ingress.hosts[0].paths[0].path | string | `"/"` |  |
-| ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
-| ingress.tls | list | `[]` |  |
-| livenessProbe.httpGet.path | string | `"/"` |  |
-| livenessProbe.httpGet.port | string | `"http"` |  |
+| metricsAuthPolicy.audience | string | `""` | Intended MaaS audience. |
+| metricsAuthPolicy.authentication | object | `{}` | Gateway session or JWT authentication rules for Authorino. |
+| metricsAuthPolicy.authorization | object | `{}` | Optional additional authorization rules; viewer membership is always required. |
+| metricsAuthPolicy.issuer | string | `""` | Trusted shared OIDC issuer URL. |
+| metricsAuthPolicy.scopeExpression | string | `""` | CEL expression selecting the verified organization_id/QGUID. |
+| metricsQuery.clientTLSSecretName | string | `""` | Secret with tls.crt and tls.key for the spoke client certificate. |
+| metricsQuery.dnsResolver | string | `"dns-default.openshift-dns.svc"` | OpenShift DNS resolver used to track hub Route address changes. |
+| metricsQuery.enabled | bool | `false` | Enable the tenant metrics datasource, Gateway route, policy, proxy, and hub relay. |
+| metricsQuery.gatewayNamespaceSelector | object | `{"matchLabels":{"kubernetes.io/metadata.name":"openshift-ingress"}}` | Gateway namespace and pod selectors for the proxy ingress policy. |
+| metricsQuery.gatewayPodSelector.matchLabels."gateway.networking.k8s.io/gateway-name" | string | `"maas-default-gateway"` |  |
+| metricsQuery.hubHostname | string | `""` | Hub mTLS Route hostname; the relay uses HTTPS with certificate verification. |
+| metricsQuery.image.digest | string | `"sha256:d1eb117322c0374e286f73d6f67912c1171c605eb34cd5dd33005375747c77a5"` |  |
+| metricsQuery.image.pullPolicy | string | `"IfNotPresent"` |  |
+| metricsQuery.image.repository | string | `"registry.access.redhat.com/ubi9/nginx-124"` | Spoke NGINX mTLS relay image repository. |
+| metricsQuery.imagePullSecrets | list | `[]` | Optional pull secrets for the relay and proxy images. |
+| metricsQuery.listenPort | int | `8080` | Loopback port for the NGINX mTLS relay sidecar. |
+| metricsQuery.proxy.enableLabelAPIs | bool | `true` | Enable tenant-filtered label name and value discovery. |
+| metricsQuery.proxy.image.digest | string | `"sha256:4053948b40f66dc5f8d2baaeb62463aec85079b55add1151a658f1005cc604f4"` | Image digest; align with the target RHOAI payload before rollout. |
+| metricsQuery.proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
+| metricsQuery.proxy.image.repository | string | `"registry.redhat.io/openshift4/ose-prom-label-proxy-rhel9"` | Pinned OpenShift prom-label-proxy image repository. |
+| metricsQuery.proxy.label | string | `"organization_id"` | Tenant label stored in hub Thanos. |
+| metricsQuery.proxy.listenPort | int | `8081` | Gateway-facing proxy port. Must differ from metricsQuery.listenPort. |
+| metricsQuery.proxy.resources.limits.cpu | string | `"100m"` |  |
+| metricsQuery.proxy.resources.limits.memory | string | `"128Mi"` |  |
+| metricsQuery.proxy.resources.requests.cpu | string | `"10m"` |  |
+| metricsQuery.proxy.resources.requests.memory | string | `"64Mi"` |  |
+| metricsQuery.resources.limits.cpu | string | `"100m"` |  |
+| metricsQuery.resources.limits.memory | string | `"128Mi"` |  |
+| metricsQuery.resources.requests.cpu | string | `"10m"` |  |
+| metricsQuery.resources.requests.memory | string | `"64Mi"` |  |
+| metricsQuery.serverCASecretName | string | `""` | Secret with ca.crt for the hub server CA. |
+| metricsRoute.hostname | string | `""` | Public Gateway hostname, used to derive the datasource's HTTPS /metrics URL. |
+| metricsRoute.name | string | `"grid-tenant-metrics"` |  |
+| metricsRoute.namespace | string | `""` | Namespace for the HTTPRoute and AuthPolicy; empty uses the Perses project. |
+| metricsRoute.parentRefs | list | `[{"name":"maas-default-gateway","namespace":"openshift-ingress","sectionName":"https"}]` | Target the default MaaS Gateway HTTPS listener; override for a different Gateway. |
+| metricsRoute.pathPrefix | string | `"/metrics"` |  |
 | nameOverride | string | `""` |  |
-| nodeSelector | object | `{}` |  |
-| podAnnotations | object | `{}` |  |
-| podLabels | object | `{}` |  |
-| podSecurityContext | object | `{}` |  |
-| readinessProbe.httpGet.path | string | `"/"` |  |
-| readinessProbe.httpGet.port | string | `"http"` |  |
-| replicaCount | int | `1` |  |
-| resources | object | `{}` |  |
-| securityContext | object | `{}` |  |
-| service.port | int | `80` |  |
-| service.type | string | `"ClusterIP"` |  |
-| serviceAccount.annotations | object | `{}` |  |
-| serviceAccount.automount | bool | `true` |  |
-| serviceAccount.create | bool | `true` |  |
-| serviceAccount.name | string | `""` |  |
-| tolerations | list | `[]` |  |
-| volumeMounts | list | `[]` |  |
-| volumes | list | `[]` |  |
+| tenantAdminNamespace.create | bool | `false` | Create and own the namespace with this Helm release. |
+| tenantAdminNamespace.name | string | `"ai-grid-o11y-tenant-admin"` | Perses project and datasource namespace for tenant metrics queries. |
 

@@ -1,10 +1,8 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schema": "https://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
-    "enabled": {
-      "type": "boolean"
-    },
+    "enabled": { "type": "boolean" },
     "collector": {
       "type": "object",
       "properties": {
@@ -18,10 +16,74 @@
           "type": "integer",
           "minimum": 1,
           "maximum": 65535
+        },
+        "scrapeConfig": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" }
+          },
+          "additionalProperties": false
         }
       },
       "required": ["namespace", "port"],
       "additionalProperties": false
+    },
+    "metricsQuery": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "hubHostname": { "type": "string", "maxLength": 253, "pattern": "^[a-z0-9.-]*$" },
+        "dnsResolver": { "type": "string", "maxLength": 253, "pattern": "^([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)(?:\\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$" },
+        "clientTLSSecretName": { "type": "string" },
+        "serverCASecretName": { "type": "string" },
+        "imagePullSecrets": { "type": "array", "items": { "type": "object" } },
+        "proxy": {
+          "type": "object",
+          "properties": {
+            "image": {
+              "type": "object",
+              "properties": {
+                "repository": { "type": "string", "minLength": 1 },
+                "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+              }
+            },
+            "listenPort": { "type": "integer", "minimum": 1024, "maximum": 65535 },
+            "label": { "type": "string", "enum": ["organization_id", "grid_tenant_id"] },
+            "enableLabelAPIs": { "type": "boolean" }
+          }
+        },
+        "listenPort": { "type": "integer", "minimum": 1024, "maximum": 65535 }
+      }
+    },
+    "tenantAdminNamespace": {
+      "type": "object",
+      "properties": { "name": { "const": "ai-grid-o11y-tenant-admin" } }
+    },
+    "datasource": {
+      "type": "object",
+      "properties": {
+        "apiVersion": { "enum": ["perses.dev/v1alpha2", "perses.dev/v1alpha1"] },
+        "instanceSelector": { "type": "object" }
+      }
+    },
+    "metricsRoute": {
+      "type": "object",
+      "properties": {
+        "namespace": { "type": "string" },
+        "pathPrefix": { "const": "/metrics" },
+        "parentRefs": { "type": "array", "items": { "type": "object" } },
+        "hostname": { "type": "string", "maxLength": 253, "pattern": "^[a-z0-9.-]*$" }
+      }
+    },
+    "metricsAuthPolicy": {
+      "type": "object",
+      "properties": {
+        "authentication": { "type": "object" },
+        "authorization": { "type": "object" },
+        "issuer": { "type": "string" },
+        "audience": { "type": "string" },
+        "scopeExpression": { "type": "string" }
+      }
     }
   },
   "required": ["collector"]
