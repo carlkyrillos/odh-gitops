@@ -10,11 +10,11 @@ Spoke-side AI Grid observability resources
 |-----|------|---------|-------------|
 | collector.namespace | string | `"redhat-ods-monitoring"` | Namespace containing the data-science-collector. Must match `operator.<type>.monitoringNamespace` when used through the parent chart. |
 | collector.port | int | `8890` | Prometheus exporter port, shared by the scrape target, NetworkPolicy and parent-injected exporter. |
-| collector.scrapeConfig.enabled | bool | `false` | Render ScrapeConfig only when this cluster has the open-cluster-management-observability namespace. |
+| collector.scrapeConfig.enabled | bool | `true` | Render ScrapeConfig. Set false for query-only installs or after migrating collection to ACM management; requires the open-cluster-management-observability namespace. |
 | datasource.apiVersion | string | `"perses.dev/v1alpha2"` |  |
 | datasource.instanceSelector | object | `{}` | Label selector for the intended spoke Perses instance. |
 | datasource.name | string | `"grid-tenant-hub-metrics"` |  |
-| enabled | bool | `false` | Include the spoke chart. The parent chart uses this as its dependency condition. |
+| enabled | bool | `false` | Include the spoke chart through the parent. Also required for standalone metrics queries. |
 | fullnameOverride | string | `""` |  |
 | metricsAuthPolicy.audience | string | `""` | Intended MaaS audience. |
 | metricsAuthPolicy.authentication | object | `{}` | Gateway session or JWT authentication rules for Authorino. |

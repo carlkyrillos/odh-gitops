@@ -7,17 +7,40 @@ parent chart's `ai-grid-o11y-spoke.enabled` value controls inclusion of this
 subchart; capability-specific values control the resources it renders.
 
 The spoke chart always renders the collector ingress NetworkPolicy. Its
-`ScrapeConfig` is opt in with `collector.scrapeConfig.enabled` because ACM MCO
-manages that resource in the hub's `open-cluster-management-observability`
-namespace and distributes it to selected managed clusters through an add-on
-Placement. Do not enable it in a spoke release without that namespace. The
-query path does not require the `ScrapeConfig` to render or start; tenant
-metric data requires the separate collection and label attribution setup.
+`ScrapeConfig` remains enabled by default so an upgrade retains existing
+chart-managed collection. It requires the
+`open-cluster-management-observability` namespace and the ScrapeConfig CRD.
+Set `collector.scrapeConfig.enabled: false` for query-only installs without
+that namespace, or when ACM manages collection separately.
+
+To migrate an existing release to ACM-managed collection, configure and verify
+the replacement on the hub before setting `collector.scrapeConfig.enabled:
+false`. ACM MCO manages its ScrapeConfig in the hub's
+`open-cluster-management-observability` namespace and distributes collection
+configuration to selected managed clusters through an add-on Placement.
+Disabling the chart's ScrapeConfig removes it from the release. The query path
+does not require that resource to render or start; tenant metric data requires
+the separate collection and label attribution setup.
 
 ## Tenant metrics queries
 
-Set `metricsQuery.enabled: true` to deploy the query path described below.
-This setting is independent of spoke metrics collection.
+For a standalone install, set both `enabled: true` and
+`metricsQuery.enabled: true` to deploy the query path described below. When
+installing through the parent chart, set `ai-grid-o11y-spoke.enabled: true`
+and `ai-grid-o11y-spoke.metricsQuery.enabled: true`.
+
+Query access is independent of spoke metrics collection. For a standalone
+query-only release, use the following toggles together with the required
+hostnames, authentication, datasource selector, and certificate Secret names:
+
+```yaml
+enabled: true
+collector:
+  scrapeConfig:
+    enabled: false
+metricsQuery:
+  enabled: true
+```
 
 The query path consists of a project-scoped `PersesDatasource` in
 `ai-grid-o11y-tenant-admin`, a GET-only `/metrics` `HTTPRoute` and route

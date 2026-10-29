@@ -1,5 +1,5 @@
 # Spoke-side AI Grid observability resources.
-# -- Include the spoke chart. The parent chart uses this as its dependency condition.
+# -- Include the spoke chart through the parent. Also required for standalone metrics queries.
 enabled: false
 
 collector:
@@ -9,8 +9,9 @@ collector:
   port: 8890
   scrapeConfig:
     # ACM normally manages this resource on the hub and distributes it through an add-on Placement.
-    # -- Render ScrapeConfig only when this cluster has the open-cluster-management-observability namespace.
-    enabled: false
+    # Keep the previous default so upgrades retain a chart-managed ScrapeConfig.
+    # -- Render ScrapeConfig. Set false for query-only installs or after migrating collection to ACM management; requires the open-cluster-management-observability namespace.
+    enabled: true
 
 nameOverride: ""
 fullnameOverride: ""
