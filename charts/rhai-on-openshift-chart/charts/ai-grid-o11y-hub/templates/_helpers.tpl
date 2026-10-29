@@ -6,6 +6,18 @@ cluster-scoped names that the ingest contract depends on.
 {{- .Chart.Name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
+{{/*
+Release-qualified names for the tenant metrics query resources. Reserve room for the
+longest resource suffix, while usage-log resource names stay fixed.
+*/}}
+{{- define "ai-grid-o11y-hub.fullname" -}}
+{{- if contains .Chart.Name .Release.Name -}}
+{{- .Release.Name | trunc 49 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name .Chart.Name | trunc 49 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
 {{- define "ai-grid-o11y-hub.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}

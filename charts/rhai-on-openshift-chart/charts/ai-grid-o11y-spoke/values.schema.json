@@ -158,7 +158,10 @@
       "type": "object",
       "properties": {
         "name": {
-          "const": "ai-grid-o11y-tenant-admin"
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 63,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
         },
         "create": {
           "type": "boolean"

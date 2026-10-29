@@ -278,13 +278,20 @@ or each spoke.
 
 The [hub chart](charts/ai-grid-o11y-hub/README.md) provides an optional mTLS
 Route and allowlisted read-query ingress to ACM Thanos. With
-`metricsQuery.enabled` set, the [spoke chart](charts/ai-grid-o11y-spoke/README.md)
+`enabled: true` and `metricsQuery.enabled: true`, the [spoke chart](charts/ai-grid-o11y-spoke/README.md)
 adds a local label proxy and mTLS NGINX relay in one pod, a tenant-admin
 Perses datasource, and an authenticated GET-only `/metrics` Gateway route.
 The spoke filters on `organization_id` by default. Supply the certificate
 Secrets, cluster hostnames, and verified OIDC viewer policy before activating
 queries. Configure Perses project
 authorization separately.
+
+The spoke chart keeps its ScrapeConfig enabled by default to preserve existing
+collection on upgrade. For query-only installs without the ACM observability
+namespace, set `collector.scrapeConfig.enabled: false` in the standalone chart
+or `ai-grid-o11y-spoke.collector.scrapeConfig.enabled: false` in the parent.
+When migrating collection to ACM management, verify the replacement before
+disabling the chart-managed ScrapeConfig.
 
 Refresh with `make update-ai-grid-charts GRID_REF=<tag-or-sha>`; this reapplies the downstream
 image/review patches and runtime template adapter, updates the dependency lock, and regenerates

@@ -7,7 +7,7 @@ The spoke chart provides three capabilities with separate switches:
 
 | Capability | What it renders |
 |---|---|
-| Metrics collection | NetworkPolicy by default (`metrics.enabled`); optional ScrapeConfig (`collector.scrapeConfig.enabled`), off by default |
+| Metrics collection | NetworkPolicy and ScrapeConfig by default (`metrics.enabled`); disable the ScrapeConfig with `collector.scrapeConfig.enabled: false` |
 | Usage-log credential | The monitoring namespace and hub credential mounted by the collector; `credential.enabled`, off by default |
 | Tenant metrics queries | A Perses datasource, Gateway route and policy, label proxy, and mTLS relay to hub Thanos; `metricsQuery.enabled`, off by default |
 
@@ -21,10 +21,12 @@ The parent chart disables this subchart by default. Set `ai-grid-o11y-spoke.enab
 to include it. When installing the spoke chart alone, the metrics collection and credential
 templates use their feature switches; query resources also require `enabled: true`.
 
-`collector.scrapeConfig.enabled` defaults to false because ACM MCO can manage the
-`ScrapeConfig` on the hub and distribute it through an add-on Placement. Enable it in a
-spoke release only when that cluster has the `open-cluster-management-observability`
-namespace and the rhobs CRD.
+`collector.scrapeConfig.enabled` defaults to true so an upgrade retains the chart-managed
+`ScrapeConfig`. It requires the `open-cluster-management-observability` namespace and the
+rhobs CRD. Set it false for query-only installs without that namespace, or after migrating
+collection to ACM management. Configure and verify the ACM replacement first: ACM MCO
+manages the ScrapeConfig on the hub and distributes collection settings to selected spokes
+through an add-on Placement. Disabling this value removes the chart-managed ScrapeConfig.
 
 ## Why the usage-log credential is created here
 
@@ -61,7 +63,7 @@ a single `helm install`, with no second pass and no manual step between.
 | `NetworkPolicy` | `allow-acm-rhai-metrics` | metrics collection when `metrics.enabled`; in `collector.namespace` |
 | `Namespace` | `redhat-ods-monitoring` | usage logs only; `collector.createNamespace`, carries `helm.sh/resource-policy: keep` |
 | `Secret` | `hub-usage-logs-auth` | usage logs only; key `token`, the hub writer token |
-| `Namespace` | `ai-grid-o11y-tenant-admin` | tenant queries only when `tenantAdminNamespace.create` |
+| `Namespace` | `ai-grid-o11y-tenant-admin` (default) | tenant queries only when `tenantAdminNamespace.create` |
 | `PersesDatasource` | `grid-tenant-hub-metrics` | tenant queries, in the tenant-admin namespace |
 | `HTTPRoute` + `AuthPolicy` | `grid-tenant-metrics` | tenant queries, in the route namespace |
 | `ConfigMap`, `Deployment`, `Service`, `NetworkPolicy` | query proxy and relay | tenant queries, in the route namespace |
@@ -175,14 +177,27 @@ or a first spoke brought up before the policy exists.
 
 ## Tenant metrics queries
 
-Set `metricsQuery.enabled: true` to deploy the query path described below.
-The parent chart must also include `ai-grid-o11y-spoke`. This setting is independent of
-spoke metrics collection; set `metrics.enabled: false` if this installation only needs
-tenant queries.
+For a standalone install, set both `enabled: true` and `metricsQuery.enabled: true`.
+Through the parent chart, set `ai-grid-o11y-spoke.enabled: true` and
+`ai-grid-o11y-spoke.metricsQuery.enabled: true`. Query access does not require spoke
+metrics collection. For a query-only standalone release, use these switches alongside
+the required hostnames, authentication, datasource selector, and certificate Secret names:
+
+```yaml
+enabled: true
+metrics:
+  enabled: false
+collector:
+  scrapeConfig:
+    enabled: false
+metricsQuery:
+  enabled: true
+```
 
 The query path consists of a project-scoped `PersesDatasource` in
-`ai-grid-o11y-tenant-admin`, a GET-only `/metrics` `HTTPRoute` and route
-`AuthPolicy`, and one query Service/Deployment/NetworkPolicy. The query pod
+`tenantAdminNamespace.name` (default `ai-grid-o11y-tenant-admin`), a GET-only
+`/metrics` `HTTPRoute` and `AuthPolicy`, and one query
+Service/Deployment/NetworkPolicy. The query pod
 runs `prom-label-proxy` in front of a loopback NGINX mTLS relay. The route
 and query Service share a namespace, so no `ReferenceGrant` is needed. The
 proxy adds a matcher for `metricsQuery.proxy.label` (default `organization_id`)

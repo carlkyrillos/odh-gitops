@@ -27,9 +27,11 @@ collector:
   # parent-injected exporter.
   port: 8890
   scrapeConfig:
-    # -- Render the ACM ScrapeConfig on this cluster. Off by default because ACM MCO can
-    # manage it on the hub and distribute it through a Placement. Requires metrics.enabled.
-    enabled: false
+    # -- Render ScrapeConfig for chart-managed collection. Enabled by default to preserve
+    # collection on upgrade. Set false for query-only installs or after verifying an
+    # ACM-managed replacement. Requires metrics.enabled, the ACM observability namespace,
+    # and the rhobs ScrapeConfig CRD.
+    enabled: true
   # -- Create `collector.namespace`, so the usage-log credential has somewhere to land
   # before the operator reconciles the DSCInitialization. Only consulted when
   # `credential.enabled` is set, since that Secret is the only reason to create it early.

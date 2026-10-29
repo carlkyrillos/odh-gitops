@@ -8,7 +8,9 @@ metadata:
     helm.sh/chart: HELM_CHART_VERSION_REDACTED
     app.kubernetes.io/name: ai-grid-o11y-hub
     app.kubernetes.io/instance: release-test
+    app.kubernetes.io/part-of: ai-grid-usage-logs
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "0.3.0"
 spec:
   podSelector:
     matchLabels:
@@ -37,7 +39,9 @@ metadata:
     helm.sh/chart: HELM_CHART_VERSION_REDACTED
     app.kubernetes.io/name: ai-grid-o11y-hub
     app.kubernetes.io/instance: release-test
+    app.kubernetes.io/part-of: ai-grid-usage-logs
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "0.3.0"
 data:
   nginx.conf: |
     worker_processes 1;
@@ -95,7 +99,9 @@ metadata:
     helm.sh/chart: HELM_CHART_VERSION_REDACTED
     app.kubernetes.io/name: ai-grid-o11y-hub
     app.kubernetes.io/instance: release-test
+    app.kubernetes.io/part-of: ai-grid-usage-logs
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "0.3.0"
 spec:
   type: ClusterIP
   ports:
@@ -116,7 +122,9 @@ metadata:
     helm.sh/chart: HELM_CHART_VERSION_REDACTED
     app.kubernetes.io/name: ai-grid-o11y-hub
     app.kubernetes.io/instance: release-test
+    app.kubernetes.io/part-of: ai-grid-usage-logs
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/component: mtls-ingress
 spec:
   replicas: 2
@@ -127,7 +135,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: c24c9d518560009b6ba3b21bf08b5cce6ca17a93106e3900ce1d90baf4711c7d
+        checksum/config: b80b459780d5a2a92d669b1dc3e7f249c583f0afe3e3dd24a6a0f5b699e68e85
       labels:
         app.kubernetes.io/name: ai-grid-o11y-hub-mtls
         app.kubernetes.io/instance: release-test
@@ -200,7 +208,9 @@ metadata:
     helm.sh/chart: HELM_CHART_VERSION_REDACTED
     app.kubernetes.io/name: ai-grid-o11y-hub
     app.kubernetes.io/instance: release-test
+    app.kubernetes.io/part-of: ai-grid-usage-logs
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "0.3.0"
 spec:
   host: "metrics-hub.example.test"
   port:

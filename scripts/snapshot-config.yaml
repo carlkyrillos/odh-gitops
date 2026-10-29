@@ -540,6 +540,10 @@ charts:
     snapshots:
       - name: default
 
+      - name: scrape-config-disabled
+        setFlags:
+          - collector.scrapeConfig.enabled=false
+
       - name: custom-collector
         setFlags:
           - collector.namespace=custom-monitoring

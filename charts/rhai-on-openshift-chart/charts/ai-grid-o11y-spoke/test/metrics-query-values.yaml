@@ -1,5 +1,8 @@
 # Render-only fixture for the authenticated spoke metrics query path.
 enabled: true
+collector:
+  scrapeConfig:
+    enabled: false
 metricsQuery:
   enabled: true
   hubHostname: metrics-hub.example.test

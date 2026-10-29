@@ -8,7 +8,9 @@ metadata:
     helm.sh/chart: HELM_CHART_VERSION_REDACTED
     app.kubernetes.io/name: ai-grid-o11y-spoke
     app.kubernetes.io/instance: release-test
+    app.kubernetes.io/part-of: ai-grid-usage-logs
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "0.3.0"
     maas.opendatahub.io/gateway-access: "true"
 
 ---
@@ -22,7 +24,9 @@ metadata:
     helm.sh/chart: HELM_CHART_VERSION_REDACTED
     app.kubernetes.io/name: ai-grid-o11y-spoke
     app.kubernetes.io/instance: release-test
+    app.kubernetes.io/part-of: ai-grid-usage-logs
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "0.3.0"
 spec:
   podSelector:
     matchLabels:
@@ -88,7 +92,9 @@ metadata:
     helm.sh/chart: HELM_CHART_VERSION_REDACTED
     app.kubernetes.io/name: ai-grid-o11y-spoke
     app.kubernetes.io/instance: release-test
+    app.kubernetes.io/part-of: ai-grid-usage-logs
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "0.3.0"
 data:
   nginx.conf: |
     worker_processes 1;
@@ -134,7 +140,9 @@ metadata:
     helm.sh/chart: HELM_CHART_VERSION_REDACTED
     app.kubernetes.io/name: ai-grid-o11y-spoke
     app.kubernetes.io/instance: release-test
+    app.kubernetes.io/part-of: ai-grid-usage-logs
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "0.3.0"
 spec:
   type: ClusterIP
   ports:
@@ -157,7 +165,9 @@ metadata:
     helm.sh/chart: HELM_CHART_VERSION_REDACTED
     app.kubernetes.io/name: ai-grid-o11y-spoke
     app.kubernetes.io/instance: release-test
+    app.kubernetes.io/part-of: ai-grid-usage-logs
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "0.3.0"
 spec:
   replicas: 2
   selector:
@@ -168,7 +178,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 192b6aa38dc0ec2db58fc1c851177c41fab7afc9233503b41000985091f103d4
+        checksum/config: f16bea279da7c559f387200191173b379412ce9404afd31422bfee967b2d5240
       labels:
         app.kubernetes.io/name: ai-grid-o11y-spoke
         app.kubernetes.io/instance: release-test
@@ -271,7 +281,9 @@ metadata:
     helm.sh/chart: HELM_CHART_VERSION_REDACTED
     app.kubernetes.io/name: ai-grid-o11y-spoke
     app.kubernetes.io/instance: release-test
+    app.kubernetes.io/part-of: ai-grid-usage-logs
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "0.3.0"
 spec:
   targetRef:
     group: gateway.networking.k8s.io
@@ -321,7 +333,9 @@ metadata:
     helm.sh/chart: HELM_CHART_VERSION_REDACTED
     app.kubernetes.io/name: ai-grid-o11y-spoke
     app.kubernetes.io/instance: release-test
+    app.kubernetes.io/part-of: ai-grid-usage-logs
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "0.3.0"
 spec:
   parentRefs:
     - name: maas-default-gateway
@@ -356,7 +370,9 @@ metadata:
     helm.sh/chart: HELM_CHART_VERSION_REDACTED
     app.kubernetes.io/name: ai-grid-o11y-spoke
     app.kubernetes.io/instance: release-test
+    app.kubernetes.io/part-of: ai-grid-usage-logs
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "0.3.0"
 spec:
   instanceSelector:
     matchLabels:
